@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071225">
+  <title>Bingo 75 — Chamador Digital</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">75</div>
+        <div><strong>BINGO <span>75</span></strong><small>CHAMADOR DIGITAL</small></div>
+      </div>
+      <div class="top-actions">
+        <span id="game-status" class="status-pill">AGUARDANDO INÍCIO</span>
+        <button class="icon-btn" id="recover-btn" title="Recuperar último jogo">↶ <span>Recuperar</span></button>
+        <button class="icon-btn" id="settings-btn" title="Configurações">⚙ <span>Configurações</span></button>
+        <button class="icon-btn" id="theater-btn" title="Modo telão">▣ <span>Modo telão</span></button>
+      </div>
+    </header>
+
+    <main class="main-grid">
+      <section class="draw-panel panel">
+        <div class="section-kicker">SORTEIO OFICIAL • 75 BOLAS</div>
+        <div class="draw-stage">
+          <div class="ball-wrap" id="ball-wrap">
+            <div class="ball" id="current-ball"><span id="current-letter">—</span><strong id="current-number">--</strong></div>
+          </div>
+          <div class="draw-label" id="draw-label">PRONTO PARA COMEÇAR</div>
+          <div class="previous-line">ANTERIOR <strong id="previous-ball">—</strong></div>
+        </div>
+        <div class="stats-row">
+          <div class="stat"><strong id="drawn-count">0</strong><span>SORTEADAS</span></div>
+          <div class="stat"><strong id="remaining-count">75</strong><span>RESTANTES</span></div>
+          <div class="stat"><strong id="progress-percent">0%</strong><span>CONCLUÍDO</span></div>
+        </div>
+        <div class="progress-track"><div id="progress-bar"></div></div>
+        <div class="countdown-row">
+          <span id="auto-state">SORTEIO AUTOMÁTICO ATIVO</span>
+          <strong id="countdown">10s</strong>
+        </div>
+        <div class="controls">
+          <button class="btn btn-primary" id="start-btn">▶ INICIAR JOGO</button>
+          <button class="btn btn-warning" id="pause-btn" disabled>Ⅱ PAUSAR</button>
+          <button class="btn btn-success" id="continue-btn" disabled>▶ CONTINUAR</button>
+          <button class="btn btn-secondary" id="next-btn">🎱 SORTEAR PRÓXIMA</button>
+          <button class="btn btn-danger" id="finish-btn" disabled>■ FINALIZAR</button>
+          <button class="btn btn-outline" id="new-btn">＋ NOVO JOGO</button>
+        </div>
+        <div class="secondary-actions">
+          <button class="btn btn-special" id="stone-btn">✦ PEDRA MAIOR</button>
+          <button class="btn btn-outline" id="fullscreen-btn">⛶ TELA CHEIA</button>
+        </div>
+      </section>
+
+      <section class="board-panel panel">
+        <div class="panel-heading">
+          <div><div class="section-kicker">ACOMPANHAMENTO</div><h2>Tabuleiro de números</h2></div>
+          <div class="legend"><span><i class="dot active-dot"></i>Sorteado</span><span><i class="dot"></i>Disponível</span></div>
+        </div>
+        <div class="bingo-board" id="bingo-board" aria-label="Tabuleiro de bingo 75"></div>
+        <div class="board-foot"><span>75 BOLAS • SEM REPETIÇÃO</span><span id="last-draw-board">ÚLTIMA: —</span></div>
+      </section>
+
+      <section class="history-panel panel">
+        <div class="panel-heading">
+          <div><div class="section-kicker">REGISTRO DA PARTIDA</div><h2>Histórico de sorteios</h2></div>
+          <span class="history-total" id="history-total">0 / 75</span>
+        </div>
+        <div class="history-list" id="history-list"><div class="empty-state">Os números sorteados aparecerão aqui.</div></div>
+      </section>
+
+      <aside class="info-panel panel">
+        <div class="section-kicker">DADOS DA PARTIDA</div>
+        <div class="info-item"><span>Identificação</span><strong id="game-id">—</strong></div>
+        <div class="info-item"><span>Início</span><strong id="start-time">—</strong></div>
+        <div class="info-item"><span>Tempo decorrido</span><strong id="elapsed-time">00:00:00</strong></div>
+        <div class="info-item"><span>Intervalo</span><strong id="interval-display">10 segundos</strong></div>
+        <div class="info-item"><span>Modo</span><strong id="mode-display">Automático</strong></div>
+        <div class="info-note">O progresso é salvo automaticamente neste navegador.</div>
+      </aside>
+    </main>
+
+    <footer> BINGO 75 <span>•</span> SISTEMA LOCAL — SEUS DADOS FICAM NESTE DISPOSITIVO</footer>
+  </div>
+
+  <div class="modal-backdrop" id="settings-modal" aria-hidden="true">
+    <section class="modal">
+      <div class="modal-head"><div><div class="section-kicker">PERSONALIZAÇÃO</div><h2>Configurações</h2></div><button class="close-btn" data-close="settings-modal">×</button></div>
+      <div class="settings-grid">
+        <label>Intervalo entre sorteios<select id="interval-select"><option value="5">5 segundos</option><option value="8">8 segundos</option><option value="10" selected>10 segundos</option><option value="15">15 segundos</option><option value="20">20 segundos</option><option value="30">30 segundos</option><option value="custom">Personalizado</option></select></label>
+        <label id="custom-interval-wrap" class="hidden">Intervalo personalizado (segundos)<input id="custom-interval" type="number" min="2" max="300" value="10"></label>
+        <label class="switch-line">Sorteio automático<input type="checkbox" id="auto-toggle" checked><span class="switch"></span></label>
+        <label class="switch-line">Efeitos sonoros<input type="checkbox" id="sound-toggle" checked><span class="switch"></span></label>
+        <label>Volume dos efeitos<input type="range" id="volume-range" min="0" max="100" value="35"></label>
+        <label class="switch-line">Animações<input type="checkbox" id="animation-toggle" checked><span class="switch"></span></label>
+        <label class="switch-line">Exibir histórico<input type="checkbox" id="history-toggle" checked><span class="switch"></span></label>
+        <label class="switch-line">Confirmar novo jogo<input type="checkbox" id="confirm-toggle" checked><span class="switch"></span></label>
+        <label class="switch-line">Recuperação automática<input type="checkbox" id="recovery-toggle" checked><span class="switch"></span></label>
+        <label>Tema visual<select id="theme-select"><option value="midnight">Azul noturno</option><option value="graphite">Grafite</option><option value="emerald">Esmeralda</option></select></label>
+        <label>Velocidade da animação<select id="speed-select"><option value="fast">Rápida</option><option value="normal" selected>Normal</option><option value="slow">Suave</option></select></label>
+      </div>
+      <div class="modal-actions"><button class="btn btn-primary" id="save-settings">SALVAR CONFIGURAÇÕES</button></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="recovery-modal" aria-hidden="true">
+    <section class="modal recovery-modal">
+      <div class="modal-head"><div><div class="section-kicker">SEGURANÇA DE DADOS</div><h2>Recuperar partida</h2></div><button class="close-btn" data-close="recovery-modal">×</button></div>
+      <p class="modal-intro">Selecione uma cópia salva para restaurar o andamento exato da partida.</p>
+      <div id="recovery-content"></div>
+      <div class="modal-actions"><button class="btn btn-outline" data-close="recovery-modal">FECHAR</button></div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="stone-modal" aria-hidden="true">
+    <section class="modal stone-modal">
+      <div class="modal-head"><div><div class="section-kicker">DESEMPATE INDEPENDENTE</div><h2>✦ Pedra Maior</h2></div><button class="close-btn" data-close="stone-modal">×</button></div>
+      <p class="modal-intro">Cadastre os concorrentes empatados. O sorteio escolherá um vencedor sem alterar as bolas do bingo principal.</p>
+      <div class="competitor-entry"><input id="competitor-name" type="text" maxlength="60" placeholder="Nome do concorrente"><button class="btn btn-secondary" id="add-competitor">＋ ADICIONAR</button></div>
+      <ul class="competitor-list" id="competitor-list"></ul>
+      <div class="stone-result" id="stone-result"><span>AGUARDANDO DESEMPATE</span><strong>✦</strong></div>
+      <div class="modal-actions"><button class="btn btn-special" id="draw-stone">SORTEAR VENCEDOR</button><button class="btn btn-outline" id="reset-stone">LIMPAR LISTA</button></div>
+      <div id="stone-records" class="stone-records"></div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
